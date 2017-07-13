@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Patient Management Screen</title>
 </head>
+Login For Admin Panel <a href="/login">Click here</a>
 <body>
 	<div align="center">
 		<h1>Patient List</h1>
