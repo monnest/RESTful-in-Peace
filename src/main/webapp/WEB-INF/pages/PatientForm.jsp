@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -11,7 +11,7 @@
 <body>
     <div align="center">
         <h1>New/Edit Patient</h1>
-        <form:form action="savePatient" method="post" modelAttribute="patient">
+        <form:form action="savePatient" method="post" commandName="patient">
         <table>
             <form:hidden path="id"/>
             <tr>
@@ -37,15 +37,9 @@
             <tr>
                 <td>Doctor Name:</td>
                 <td>
-                    <select name="doctorId">
-                    <option value="-1">Select a Name</option>
-                    <c:forEach items="${doctorList}" var="doctor">
-                        <option value="${doctor.id}">${doctor.doctorName}</option>
-                    </c:forEach>
-                </select>
-                      <%--  <form:select path="doctorId">
-                            <form:options items="${doctorList}" />
-                        </form:select>--%>
+                       <form:select path="doctorId" name="doctorId">
+                           <form:options items="${doctorList}" itemValue="doctorId" itemLabel="doctorName"/>
+                       </form:select>
                 </td>
             </tr>
             <tr>

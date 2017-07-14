@@ -31,7 +31,6 @@ public class Patient implements Serializable {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="doctor_id")
-
 	private Doctor doctorId;
 
 	public int getId() {
@@ -41,6 +40,10 @@ public class Patient implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+	public Doctor getDoctorId() { return doctorId;}
+
+	public void setDoctorId(Doctor doctorId) { this.doctorId = doctorId;}
 
 	public String getName() {
 		return name;
@@ -78,8 +81,5 @@ public class Patient implements Serializable {
 
 	public void setDiseaseName(String diseaseName) { this.diseaseName = diseaseName;}
 
-	public Doctor getDoctorId() { return doctorId;}
-
-	public void setDoctorId(Doctor doctorId) { this.doctorId = doctorId;}
 
 }

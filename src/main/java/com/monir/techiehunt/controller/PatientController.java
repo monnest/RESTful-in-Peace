@@ -57,17 +57,9 @@ public class PatientController {
 		Patient patient = new Patient();
 		Map<String, Object> doctorMap = new HashMap<String, Object>();
 		doctorMap.put("doctorList", doctorService.getAllDoctors());
-		//model.addObject("patient", patient);
-		//model.addObject("doctorList", doctorList);
-		//model.setViewName("PatientForm");
 		doctorMap.put("patient",  patient);
 		return new ModelAndView("PatientForm", doctorMap);
-	/*	 model = new ModelAndView("PatientForm");
-		model.addObject("patient", patient);
-		model.addObject("doctorMap", doctorMap);
-		return model;*/
 	}
-
 	@RequestMapping(value = "/editPatient", method = RequestMethod.GET)
 	public ModelAndView editContact(HttpServletRequest request) {
 		int patientId = Integer.parseInt(request.getParameter("id"));
@@ -78,10 +70,11 @@ public class PatientController {
 		return model;
 	}
 	@RequestMapping(value = "/savePatient", method = RequestMethod.POST)
-	public ModelAndView savePatient(@ModelAttribute Patient patient) {
+	//public ModelAndView savePatient(@ModelAttribute Patient patient) {
+	public ModelAndView savePatient(@ModelAttribute("patient") Patient patient, BindingResult result) {
 		if (patient.getId() == 0) { // if patient id is 0 then creating the
 			// patient other updating the patient
-			patientService.addPatient(patient);
+	//		patientService.addPatient(patient);
 		} else {
 			patientService.updatePatient(patient);
 		}
