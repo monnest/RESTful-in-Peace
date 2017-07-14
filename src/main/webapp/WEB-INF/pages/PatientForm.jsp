@@ -35,6 +35,20 @@
                 <td><form:input path="diseaseName" /></td>
             </tr>
             <tr>
+                <td>Doctor Name:</td>
+                <td>
+                    <select name="doctorId">
+                    <option value="-1">Select a Name</option>
+                    <c:forEach items="${doctorList}" var="doctor">
+                        <option value="${doctor.id}">${doctor.doctorName}</option>
+                    </c:forEach>
+                </select>
+                      <%--  <form:select path="doctorId">
+                            <form:options items="${doctorList}" />
+                        </form:select>--%>
+                </td>
+            </tr>
+            <tr>
                 <td colspan="2" align="center"><input type="submit" value="Save"></td>
             </tr>
         </table>

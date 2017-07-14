@@ -1,12 +1,17 @@
 package com.monir.techiehunt.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.monir.techiehunt.model.Doctor;
 import com.monir.techiehunt.model.Patient;
+import com.monir.techiehunt.service.DoctorService;
 import com.monir.techiehunt.service.PatientService;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +40,9 @@ public class PatientController {
 	@Autowired
 	private PatientService patientService;
 
+	@Autowired
+	private DoctorService doctorService;
+
 	@RequestMapping(value = "/")
 	public ModelAndView listPatient(ModelAndView model) throws IOException {
 		List<Patient> listPatient = patientService.getAllPatients();
@@ -43,13 +52,31 @@ public class PatientController {
 	}
 
 	@RequestMapping(value = "/newPatient", method = RequestMethod.GET)
-	public ModelAndView newContact(ModelAndView model) {
+	public ModelAndView newContact(@ModelAttribute("command")  Doctor doctor,
+								   BindingResult result) {
 		Patient patient = new Patient();
+		Map<String, Object> doctorMap = new HashMap<String, Object>();
+		doctorMap.put("doctorList", doctorService.getAllDoctors());
+		//model.addObject("patient", patient);
+		//model.addObject("doctorList", doctorList);
+		//model.setViewName("PatientForm");
+		doctorMap.put("patient",  patient);
+		return new ModelAndView("PatientForm", doctorMap);
+	/*	 model = new ModelAndView("PatientForm");
 		model.addObject("patient", patient);
-		model.setViewName("PatientForm");
-		return model;
+		model.addObject("doctorMap", doctorMap);
+		return model;*/
 	}
 
+	@RequestMapping(value = "/editPatient", method = RequestMethod.GET)
+	public ModelAndView editContact(HttpServletRequest request) {
+		int patientId = Integer.parseInt(request.getParameter("id"));
+		Patient patient = patientService.getPatient(patientId);
+		ModelAndView model = new ModelAndView("PatientForm");
+		model.addObject("patient", patient);
+
+		return model;
+	}
 	@RequestMapping(value = "/savePatient", method = RequestMethod.POST)
 	public ModelAndView savePatient(@ModelAttribute Patient patient) {
 		if (patient.getId() == 0) { // if patient id is 0 then creating the
@@ -68,15 +95,7 @@ public class PatientController {
 		return new ModelAndView("redirect:/");
 	}
 
-	@RequestMapping(value = "/editPatient", method = RequestMethod.GET)
-	public ModelAndView editContact(HttpServletRequest request) {
-		int patientId = Integer.parseInt(request.getParameter("id"));
-		Patient patient = patientService.getPatient(patientId);
-		ModelAndView model = new ModelAndView("PatientForm");
-		model.addObject("patient", patient);
 
-		return model;
-	}
 
 	/*Login Part*/
 /*	@RequestMapping(value = "/welcome**", method = RequestMethod.GET)

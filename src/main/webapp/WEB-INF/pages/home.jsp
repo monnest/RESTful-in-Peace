@@ -7,8 +7,24 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Patient Management Screen</title>
+	<style type="text/css">
+		#block_container
+		{
+			text-align:center;
+		}
+		#bloc1, #bloc2
+		{
+			display:inline;
+			padding-left: 20px;
+		}
+	</style>
 </head>
-Login For Admin Panel <a href="/login">Click here</a>
+<div id="block_container">
+	<div align="left" id="bloc1">
+		<a href="/viewList">Add Doctor</a>
+	</div>
+	<div align="right" id="bloc2"> <a href="/login">Admin Login</a></div>
+</div>
 <body>
 	<div align="center">
 		<h1>Patient List</h1>
