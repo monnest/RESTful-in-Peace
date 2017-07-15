@@ -40,6 +40,11 @@
                        <form:select path="doctorId" name="doctorId">
                            <form:options items="${doctorList}" itemValue="doctorId" itemLabel="doctorName"/>
                        </form:select>
+
+                        <%--  <form:select path="doctorId">
+                              <form:option value="NONE" label="--- Select ---"/>
+                              <form:options items="${doctorList}" />
+                          </form:select>--%>
                 </td>
             </tr>
             <tr>

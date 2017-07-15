@@ -21,7 +21,7 @@
                 http://www.springframework.org/schema/context
                 http://www.springframework.org/schema/context/spring-context.xsd
                 http://www.springframework.org/schema/security
-                http://www.springframework.org/schema/security/spring-security.xsd">
+                http://www.springframework.org/schema/security/spring-security.xsd" default-lazy-init="true">
 
 <security:http auto-config="true">
 		<security:intercept-url pattern="/admin**" access="ROLE_USER" />
@@ -34,7 +34,7 @@
 				password-parameter="password" />
 		<security:logout logout-success-url="/login?logout"  />
 		<!-- enable csrf protection -->
-		<security:csrf/>
+		<security:csrf disabled="true"/>
 	</security:http>
 
 	<security:authentication-manager>

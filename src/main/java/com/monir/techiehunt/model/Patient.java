@@ -1,6 +1,8 @@
 package com.monir.techiehunt.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -11,27 +13,37 @@ public class Patient implements Serializable {
 	private static final long serialVersionUID = -3465813074586302847L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "patient_name")
+	@Column(name = "patient_name", nullable = false)
 	private String name;
 
-	@Column
+	@Column(nullable = false)
 	private String email;
 
-	@Column
+	@Column(nullable = false)
 	private String address;
 
-	@Column
+	@Column(nullable = false)
 	private String telephone;
 
-	@Column(name = "disease_name")
+	@Column(name = "disease_name", nullable = false)
 	private String diseaseName;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="doctor_id")
-	private Doctor doctorId;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "PATIENT_DOCTOR_TBL",
+			joinColumns = { @JoinColumn(name = "PATIENT_ID") },
+			inverseJoinColumns = { @JoinColumn(name = "DOCTOR_ID") })
+	private Set<Doctor> doctorId = new HashSet<Doctor>();
+
+	public Set<Doctor> getDoctorId() {
+		return doctorId;
+	}
+
+	public void setDoctorId(Set<Doctor> doctorId) {
+		this.doctorId = doctorId;
+	}
 
 	public int getId() {
 		return id;
@@ -40,10 +52,6 @@ public class Patient implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public Doctor getDoctorId() { return doctorId;}
-
-	public void setDoctorId(Doctor doctorId) { this.doctorId = doctorId;}
 
 	public String getName() {
 		return name;
