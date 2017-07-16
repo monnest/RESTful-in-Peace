@@ -31,7 +31,7 @@ public class Patient implements Serializable {
 	@Column(name = "disease_name", nullable = false)
 	private String diseaseName;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "PATIENT_DOCTOR_TBL",
 			joinColumns = { @JoinColumn(name = "PATIENT_ID") },
 			inverseJoinColumns = { @JoinColumn(name = "DOCTOR_ID") })

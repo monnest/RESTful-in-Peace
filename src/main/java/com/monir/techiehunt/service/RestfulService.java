@@ -1,7 +1,7 @@
 package com.monir.techiehunt.service;
 
 import com.monir.techiehunt.dao.RestfulDAO;
-import com.monir.techiehunt.model.Patient;
+import com.monir.techiehunt.model.Doctor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,23 +18,23 @@ public class RestfulService {
     RestfulDAO restfulDAO;
 
     @Transactional
-    public List getAllPatients() {
-        return restfulDAO.getAllPatients();
+    public List getAllDoctors() {
+        return restfulDAO.getAllDoctors();
     }
     @Transactional
-    public Patient getPatient(int id) {
-        return restfulDAO.getPatient(id);
+    public Doctor getDoctor(int id) {
+        return restfulDAO.getDoctor(id);
     }
     @Transactional
-    public void addPatient(Patient patient) {
-        restfulDAO.addPatient(patient);
+    public void addDoctor(Doctor doctor) {
+        restfulDAO.addDoctor(doctor);
     }
     @Transactional
-    public void updatePatient(Patient patient) {
-        restfulDAO.updatePatient(patient);
+    public void updateDoctor(Doctor doctor) {
+        restfulDAO.updateDoctor(doctor);
     }
     @Transactional
-    public void deletePatient(int id) {
-        restfulDAO.deletePatient(id);
+    public void deleteDoctor(int id) {
+        restfulDAO.deleteDoctor(id);
     }
 }

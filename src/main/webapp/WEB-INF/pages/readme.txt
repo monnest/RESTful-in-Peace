@@ -1,0 +1,24 @@
+create table PATIENT_TBL (
+   id BIGINT NOT NULL AUTO_INCREMENT,
+   patient_name VARCHAR(100) NOT NULL,
+   email VARCHAR(100) NOT NULL,
+   address VARCHAR(100) NOT NULL,
+   telephone  VARCHAR(100) NOT NULL,
+   disease_name VARCHAR(100) NOT NULL,
+   PRIMARY KEY (id)
+);
+
+create table DOCTOR_TBL(
+   id BIGINT NOT NULL AUTO_INCREMENT,
+   doctor_name VARCHAR(30) NOT NULL,
+    designation VARCHAR(30) NOT NULL,
+   PRIMARY KEY (id)
+);
+
+ CREATE TABLE PATIENT_DOCTOR_TBL (
+    patient_id BIGINT NOT NULL,
+    doctor_id BIGINT NOT NULL,
+    PRIMARY KEY (patient_id, doctor_id),
+    CONSTRAINT FK_PATIENT_TBL FOREIGN KEY (patient_id) REFERENCES PATIENT_TBL (id),
+    CONSTRAINT FK_DOCTOR_TBL FOREIGN KEY (doctor_id) REFERENCES DOCTOR_TBL (id)
+);

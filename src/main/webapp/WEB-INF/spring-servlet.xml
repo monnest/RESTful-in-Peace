@@ -23,24 +23,35 @@
                 http://www.springframework.org/schema/security
                 http://www.springframework.org/schema/security/spring-security.xsd" default-lazy-init="true">
 
-<security:http auto-config="true">
-		<security:intercept-url pattern="/admin**" access="ROLE_USER" />
 
+
+<security:http auto-config="true" use-expressions="true">
+	<security:access-denied-handler error-page="/403" />
+		<security:intercept-url pattern="/admin**" access="ROLE_USER" />
+	<!--<security:intercept-url pattern="/"     access="hasRole('USER') or hasRole('ADMIN') and hasRole('DBA')" />-->
+	<security:intercept-url pattern="/home" access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_DBA')" />
+	<security:intercept-url pattern="/editPatient" access="hasRole('ROLE_USER')" />
+	<security:intercept-url pattern="/deletePatient" access="hasRole('ROLE_ADMIN')" />
 		<security:form-login
-				login-page="/login"
-				default-target-url="/welcome"
-				authentication-failure-url="/login?error"
+				login-page="/"
+				default-target-url="/home"
+				authentication-failure-url="/Access_Denied"
 				username-parameter="username"
-				password-parameter="password" />
-		<security:logout logout-success-url="/login?logout"  />
+				password-parameter="password"/>
+				<security:logout logout-url="/logout"/>
+	<!--<security:logout logout-success-url="/login?logout"  />-->
 		<!-- enable csrf protection -->
 		<security:csrf disabled="true"/>
 	</security:http>
+
+	<security:global-method-security pre-post-annotations="enabled"/>
 
 	<security:authentication-manager>
 		<security:authentication-provider>
 			<security:user-service>
 				<security:user name="monir" password="monir" authorities="ROLE_USER" />
+				<security:user name="admin" password="root123" authorities="ROLE_ADMIN" />
+				<security:user name="dba"   password="root123" authorities="ROLE_ADMIN,ROLE_DBA" />
 			</security:user-service>
 		</security:authentication-provider>
 	</security:authentication-manager>
@@ -62,7 +73,6 @@
 		<property name="prefix" value="/WEB-INF/pages/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
-
 
 	<!-- DataSource -->
 	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource"

@@ -1,7 +1,7 @@
 package com.monir.techiehunt.dao;
 
 
-import com.monir.techiehunt.model.Patient;
+import com.monir.techiehunt.model.Doctor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,28 +19,28 @@ public class RestfulDAO {
         this.sessionFactory = sf;
     }
 
-    public List getAllPatients() {
+    public List getAllDoctors() {
         Session session = this.sessionFactory.getCurrentSession();
-        List patientList = session.createQuery("from Patient").list();
-        return patientList;
+        List doctorList = session.createQuery("from Doctor").list();
+        return doctorList;
     }
-    public Patient getPatient(int id) {
+    public Doctor getDoctor(int id) {
         Session session = this.sessionFactory.getCurrentSession();
-        Patient patient = (Patient) session.load(Patient.class, new Integer(id));
-        return patient;
+        Doctor doctor = (Doctor) session.load(Doctor.class, new Integer(id));
+        return doctor;
     }
-    public Patient addPatient(Patient patient) {
+    public Doctor addDoctor(Doctor doctor) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.persist(patient);
-        return patient;
+        session.persist(doctor);
+        return doctor;
     }
-    public void updatePatient(Patient patient) {
+    public void updateDoctor(Doctor doctor) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.update(patient);
+        session.update(doctor);
     }
-    public void deletePatient(int id) {
+    public void deleteDoctor(int id) {
         Session session = this.sessionFactory.getCurrentSession();
-        Patient p = (Patient) session.load(Patient.class, new Integer(id));
+        Doctor p = (Doctor) session.load(Doctor.class, new Integer(id));
         if (null != p) {
             session.delete(p);
         }

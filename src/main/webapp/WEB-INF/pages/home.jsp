@@ -23,12 +23,18 @@
 	<div align="left" id="bloc1">
 		<a href="/viewList">Add Doctor</a>
 	</div>
-	<div align="right" id="bloc2"> <a href="/login">Admin Login</a></div>
+	<%--<div align="right" id="bloc2"> <a href="/login">Admin Login</a></div>--%>
+	<a href="<c:url value="/logout" />">Logout</a>
 </div>
 <body>
 	<div align="center">
 		<h1>Patient List</h1>
-		
+		<c:if test="${not empty error}">
+			<div class="error">${error}</div>
+		</c:if>
+		<c:if test="${not empty msg}">
+			<div class="msg">${msg}</div>
+		</c:if>
 		<table border="1">
 
 			<th>Name</th>

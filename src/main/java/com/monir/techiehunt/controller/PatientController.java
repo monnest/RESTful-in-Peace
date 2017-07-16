@@ -2,6 +2,7 @@ package com.monir.techiehunt.controller;
 
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,8 +13,10 @@ import com.monir.techiehunt.model.Patient;
 import com.monir.techiehunt.service.DoctorService;
 import com.monir.techiehunt.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -37,7 +40,7 @@ public class PatientController {
 	@Autowired
 	private DoctorService doctorService;
 
-	@RequestMapping(value = "/")
+	@RequestMapping(value = "/home")
 	public ModelAndView listPatient(ModelAndView model) throws IOException {
 		List<Patient> listPatient = patientService.getAllPatients();
 		model.addObject("listPatient", listPatient);
@@ -69,17 +72,20 @@ public class PatientController {
 	public ModelAndView editContact(HttpServletRequest request) {
 		int patientId = Integer.parseInt(request.getParameter("id"));
 		Patient patient = patientService.getPatient(patientId);
+		Map<String, Object> doctorMap = new HashMap<String, Object>();
+		doctorMap.put("doctorList", doctorService.getAllDoctors());
+		doctorMap.put("patient",  patient);
 		ModelAndView model = new ModelAndView("PatientForm");
-		model.addObject("patient", patient);
-
-		return model;
+		/*model.addObject("patient", patient);
+		return model;*/
+		return new ModelAndView("PatientForm", doctorMap);
 	}
-	@RequestMapping(value = { "/savePatient" }, method = RequestMethod.POST)
+/*	@RequestMapping(value = { "/savePatient" }, method = RequestMethod.POST)
 	public String savePatient(@ModelAttribute Patient patient, BindingResult result,
 						   ModelMap model) {
 
 		if (result.hasErrors()) {
-			return "home";
+			return "PatientForm";
 		}
 		if (patient.getId() == 0) { // if patient id is 0 then creating the
 			// patient other updating the patient
@@ -88,17 +94,29 @@ public class PatientController {
 			patientService.updatePatient(patient);
 		}
 
-		model.addAttribute("success", "Patient " + patient.getName() + " registered successfully");
+		//model.addAttribute("success", "Patient " + patient.getName() + " registered successfully");
 		//return "success";
-		return "home";
+		return "/home";
+	}*/
+	@RequestMapping(value = "/savePatient", method = RequestMethod.POST)
+	public ModelAndView savePatient(@ModelAttribute Patient patient, BindingResult result, ModelMap model) {
+		if (result.hasErrors()) {
+			return new ModelAndView("PatientForm");
+		}
+		if (patient.getId() == 0) { // if patient id is 0 then creating the
+			// patient other updating the patient
+			patientService.addPatient(patient);
+		} else {
+			patientService.updatePatient(patient);
+		}
+		return new ModelAndView("redirect:/home");
 	}
-
 
 	@RequestMapping(value = "/deletePatient", method = RequestMethod.GET)
 	public ModelAndView deletePatient(HttpServletRequest request) {
 		int patientId = Integer.parseInt(request.getParameter("id"));
 		patientService.deletePatient(patientId);
-		return new ModelAndView("redirect:/");
+		return new ModelAndView("redirect:/home");
 	}
 
 
@@ -112,12 +130,11 @@ public class PatientController {
 		model.addObject("message", "This is welcome page!");
 		model.setViewName("hello");
 		return model;*/
-	@RequestMapping(value = "/welcome", method = RequestMethod.GET)
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView redirect() {
 		ModelAndView model = new ModelAndView();
 		model.addObject("title", "Spring Security Custom Login Form");
-		model.addObject("message", "This is protected page!");
-		model.setViewName("welcome");
+		model.setViewName("index");
 		return model;
 	}
 
@@ -148,17 +165,50 @@ public class PatientController {
 		model.setViewName("login");
 
 		return model;
-
 	}
+	/*@RequestMapping(value = "/Access_Denied", method = RequestMethod.GET)
+	public String accessDeniedPage(ModelMap model) {
+		model.addAttribute("user", getPrincipal());
+		return "accessDenied";
+	}*/
+
+	// for 403 access denied page
+	@RequestMapping(value = "/403", method = RequestMethod.GET)
+	public ModelAndView accesssDenied(Principal user) {
+
+		ModelAndView model = new ModelAndView();
+		if (user != null) {
+			model.addObject("msg", "Hi " + user.getName()
+					+ ", You can not access this page!");
+		} else {
+			model.addObject("msg",
+					"You can not access this page!");
+		}
+
+		model.setViewName("403");
+		return model;
+	}
+
 	@RequestMapping(value="/logout", method = RequestMethod.GET)
 	public ModelAndView logoutPage (HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null){
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
-		ModelAndView model = new ModelAndView();
-		model.setViewName("home");
-		return model;
+		return new ModelAndView("redirect:/login");
+	}
+
+
+	private String getPrincipal(){
+		String userName = null;
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (principal instanceof UserDetails) {
+			userName = ((UserDetails)principal).getUsername();
+		} else {
+			userName = principal.toString();
+		}
+		return userName;
 	}
 
 }

@@ -52,7 +52,7 @@ public class DoctorController {
 	@Secured("ROLE_USER")
 	@RequestMapping(value = "/deleteDoctor", method = RequestMethod.GET)
 	public ModelAndView deleteDoctor(HttpServletRequest request) {
-		int doctorId = Integer.parseInt(request.getParameter("id"));
+		Integer doctorId = Integer.parseInt(request.getParameter("id"));
 		doctorService.deleteDoctor(doctorId);
 		return new ModelAndView("redirect:/viewList");
 	}
