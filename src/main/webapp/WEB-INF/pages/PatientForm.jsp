@@ -11,7 +11,7 @@
 <body>
     <div align="center">
         <h1>New/Edit Patient</h1>
-        <form:form action="savePatient" method="post" commandName="patient">
+        <form:form  commandName="patient"  method="POST" modelAttribute="patient" action="savePatient">
         <table>
             <form:hidden path="id"/>
             <tr>
@@ -37,14 +37,10 @@
             <tr>
                 <td>Doctor Name:</td>
                 <td>
-                       <form:select path="doctorId" name="doctorId">
-                           <form:options items="${doctorList}" itemValue="doctorId" itemLabel="doctorName"/>
-                       </form:select>
-
-                        <%--  <form:select path="doctorId">
-                              <form:option value="NONE" label="--- Select ---"/>
-                              <form:options items="${doctorList}" />
-                          </form:select>--%>
+                    <form:select path="doctorId" multiple="single" id="state" class="small">
+                        <form:option value="-1" label="-- Select State--"></form:option>
+                        <form:options items="${doctorList}" itemValue="doctorId" itemLabel="doctorName"/>
+                    </form:select>
                 </td>
             </tr>
             <tr>

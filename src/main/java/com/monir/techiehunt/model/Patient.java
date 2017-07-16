@@ -13,7 +13,7 @@ public class Patient implements Serializable {
 	private static final long serialVersionUID = -3465813074586302847L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
 	@Column(name = "patient_name", nullable = false)
@@ -88,6 +88,22 @@ public class Patient implements Serializable {
 	public String getDiseaseName() {return diseaseName;}
 
 	public void setDiseaseName(String diseaseName) { this.diseaseName = diseaseName;}
+
+	@Override
+	public String toString() {
+		String result = String.format(
+				"Patient [id=%d, name='%s']%n",
+				id, name);
+		if (doctorId != null) {
+			for(Doctor doctor : doctorId) {
+				result += String.format(
+						"doctor[id=%d, name='%s']%n",
+						doctor.getDoctorId(), doctor.getDoctorName());
+			}
+		}
+
+		return result;
+	}
 
 
 }

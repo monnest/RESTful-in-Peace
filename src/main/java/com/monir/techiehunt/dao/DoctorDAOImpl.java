@@ -35,7 +35,7 @@ public class DoctorDAOImpl implements DoctorDAO{
 
     }
 
-    public Doctor getDoctor(int doctorId) {
+    public Doctor getDoctor(Integer doctorId) {
         return (Doctor) sessionFactory.getCurrentSession().get(
                 Doctor.class, doctorId);
     }

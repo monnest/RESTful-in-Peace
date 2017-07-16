@@ -15,5 +15,5 @@ public interface DoctorDAO {
 
     public Doctor updateDoctor(Doctor doctor);
 
-    public Doctor getDoctor(int doctorId);
+    public Doctor getDoctor(Integer doctorId);
 }

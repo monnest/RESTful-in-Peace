@@ -1,10 +1,8 @@
 package com.monir.techiehunt.controller;
 
+import java.beans.PropertyEditorSupport;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,25 +11,21 @@ import com.monir.techiehunt.model.Doctor;
 import com.monir.techiehunt.model.Patient;
 import com.monir.techiehunt.service.DoctorService;
 import com.monir.techiehunt.service.PatientService;
-import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
 public class PatientController {
-
-	private static final Logger logger = Logger
-			.getLogger(PatientController.class);
 
 	public PatientController() {
 		System.out.println("PatientController()");
@@ -49,6 +43,17 @@ public class PatientController {
 		model.addObject("listPatient", listPatient);
 		model.setViewName("home");
 		return model;
+	}
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder, WebRequest request) {
+
+		binder.registerCustomEditor(Doctor.class, "doctorId", new PropertyEditorSupport() {
+			@Override
+			public void setAsText(String text) {
+				setValue((text.equals(""))?null:doctorService.getDoctor(Integer.parseInt((String)text)));
+			}
+		});
 	}
 
 	@RequestMapping(value = "/newPatient", method = RequestMethod.GET)
@@ -69,17 +74,25 @@ public class PatientController {
 
 		return model;
 	}
-	@RequestMapping(value = "/savePatient", method = RequestMethod.POST)
-	//public ModelAndView savePatient(@ModelAttribute Patient patient) {
-	public ModelAndView savePatient(@ModelAttribute("patient") Patient patient, BindingResult result) {
+	@RequestMapping(value = { "/savePatient" }, method = RequestMethod.POST)
+	public String savePatient(@ModelAttribute Patient patient, BindingResult result,
+						   ModelMap model) {
+
+		if (result.hasErrors()) {
+			return "home";
+		}
 		if (patient.getId() == 0) { // if patient id is 0 then creating the
 			// patient other updating the patient
-	//		patientService.addPatient(patient);
+			patientService.addPatient(patient);
 		} else {
 			patientService.updatePatient(patient);
 		}
-		return new ModelAndView("redirect:/");
+
+		model.addAttribute("success", "Patient " + patient.getName() + " registered successfully");
+		//return "success";
+		return "home";
 	}
+
 
 	@RequestMapping(value = "/deletePatient", method = RequestMethod.GET)
 	public ModelAndView deletePatient(HttpServletRequest request) {

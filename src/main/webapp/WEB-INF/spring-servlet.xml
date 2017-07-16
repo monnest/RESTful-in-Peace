@@ -85,12 +85,46 @@
 			</props>
 		</property>
 		<property name="packagesToScan" value="com.monir.techiehunt.model"></property>
+
+	</bean>
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<!--<mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
+	<bean id="conversionService"
+		  class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="com.monir.techiehunt.conversion.StringToDoctor"/>
+			</list>
+		</property>
+	</bean>-->
+
+<!--
+	<mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
+
+	<bean id="conversionService"
+		  class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<bean class="com.monir.techiehunt.conversion.StringToDoctor"/>
+			</list>
+		</property>
+	</bean>
+-->
+	<mvc:annotation-driven conversion-service="conversionService"/>
+
+	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<bean class="com.monir.techiehunt.conversion.StringToDoctor"/>
+			</set>
+		</property>
 	</bean>
 <mvc:default-servlet-handler/>
 	<!-- Transaction -->
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
+
 	</bean>
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
