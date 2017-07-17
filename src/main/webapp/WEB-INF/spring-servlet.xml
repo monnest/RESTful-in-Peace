@@ -49,7 +49,7 @@
 	<security:authentication-manager>
 		<security:authentication-provider>
 			<security:user-service>
-				<security:user name="monir" password="monir" authorities="ROLE_USER" />
+				<security:user name="user" password="user" authorities="ROLE_USER" />
 				<security:user name="admin" password="root123" authorities="ROLE_ADMIN" />
 				<security:user name="dba"   password="root123" authorities="ROLE_ADMIN,ROLE_DBA" />
 			</security:user-service>
